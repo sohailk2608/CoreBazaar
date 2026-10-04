@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111827" />
+    <title>CoreBazaar | Computer components marketplace</title>
+    <style>
+      :root { color-scheme: light; font-family: system-ui, sans-serif; color: #111827; background: #f3f4f6; }
+      * { box-sizing: border-box; }
+      body { margin: 0; }
+      header { background: #111827; color: white; padding: 1.25rem max(1rem, calc((100% - 1120px) / 2)); }
+      header a { color: #a7f3d0; text-decoration: none; font-weight: 700; }
+      main { max-width: 1120px; margin: 2rem auto; padding: 0 1rem; }
+      h1 { margin-bottom: .35rem; }
+      .muted { color: #6b7280; }
+      #catalog { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+      article { background: white; border: 1px solid #e5e7eb; border-radius: .8rem; padding: 1.1rem; }
+      article h2 { font-size: 1.05rem; }
+      .price { font-size: 1.2rem; font-weight: 700; }
+      #status { padding: .8rem 1rem; background: #ecfdf5; border-radius: .5rem; }
+      #status.error { background: #fef2f2; color: #991b1b; }
+    </style>
+  </head>
+  <body>
+    <header><a href="/">CoreBazaar</a></header>
+    <main>
+      <h1>Computer components, all in one place.</h1>
+      <p class="muted">A starter storefront for India's next components marketplace.</p>
+      <p id="status" role="status">Loading listings…</p>
+      <section id="catalog" aria-label="Product listings"></section>
+    </main>
+    <script>
+      const status = document.querySelector("#status");
+      const catalog = document.querySelector("#catalog");
+      const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
+
+      async function loadProducts() {
+        try {
+          const response = await fetch("/api/products");
+          if (!response.ok) throw new Error(`Catalog request failed (${response.status})`);
+          const { data } = await response.json();
+          status.textContent = data.length ? `${data.length} listing(s)` : "No listings yet.";
+          for (const product of data) {
+            const card = document.createElement("article");
+            const category = document.createElement("p");
+            category.className = "muted";
+            category.textContent = product.categoryName;
+            const title = document.createElement("h2");
+            title.textContent = product.title;
+            const price = document.createElement("p");
+            price.className = "price";
+            price.textContent = inr.format(product.pricePaise / 100);
+            card.append(category, title, price);
+            if (product.brand) {
+              const brand = document.createElement("p");
+              brand.className = "muted";
+              brand.textContent = product.brand;
+              card.append(brand);
+            }
+            catalog.append(card);
+          }
+        } catch (error) {
+          status.classList.add("error");
+          status.textContent = error instanceof Error ? error.message : "Could not load listings.";
+        }
+      }
+
+      void loadProducts();
+    </script>
+  </body>
+</html>

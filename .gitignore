@@ -1,0 +1,30 @@
+# Local secrets and environment
+.env
+.env.*
+!.env.example
+*.tfvars
+!*.tfvars.example
+*.pem
+*.key
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+**/backend.hcl
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

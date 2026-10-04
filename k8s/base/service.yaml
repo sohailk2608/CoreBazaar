@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: corebazaar-api
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: corebazaar-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP

@@ -1,0 +1,7 @@
+aws_region            = "ap-south-1"
+vpc_cidr              = "10.40.0.0/16"
+availability_zones    = ["ap-south-1a", "ap-south-1b"]
+private_subnet_cidrs  = ["10.40.1.0/24", "10.40.2.0/24"]
+public_subnet_cidrs   = ["10.40.101.0/24", "10.40.102.0/24"]
+cluster_admin_cidrs   = ["203.0.113.10/32"] # Replace with trusted admin egress IPs.
+kubernetes_version   = "1.31"              # Select a currently supported EKS version.
